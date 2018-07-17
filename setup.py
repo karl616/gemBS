@@ -6,6 +6,7 @@ from distutils.core import setup
 from setuptools import setup, Command
 from setuptools.command.install import install as _install
 from setuptools.command.build_py import build_py as _build_py
+from setuptools.command.build_ext import build_ext as _build_ext
 from setuptools.command.install_scripts import install_scripts as _install_scripts
 from setuptools.command.install_lib import install_lib as _install_lib
 from distutils.command.clean import clean as _clean
@@ -140,21 +141,38 @@ def _install_bundle(install_dir):
 # hack the setup tools installation
 class install(_install):
 
+    
+
     def run(self):
         
         _install.run(self)
 
         # find target folder
-        install_dir = os.path.join(gemBS_install_dir,"gemBS")
-        _install_bundle(install_dir)
+        try:
+            install_dir = os.path.join(gemBS_install_dir,"gemBS")
+            _install_bundle(install_dir)
+        except FileNotFoundError:
+            print("""
+External libraries not found. Either these has to be built with:
+
+python3 setup.py build_ext
+
+prior to installation. Alternatively, needed software can be manually
+installed""")
         
  
 # hack the setup tools building       
 class build_py(_build_py):
     
     def run(self):
-        compile_gemBS_tools()
+        #compile_gemBS_tools()
         _build_py.run(self)
+
+class build_ext(_build_ext):
+
+    def run(self):
+        compile_gemBS_tools()
+        _build_ext.run(self)      
 
 class install_lib(_install_lib):
     def run(self):
@@ -184,7 +202,7 @@ class clean(_clean):
         clean_gemBS_tools()
 
 
-_commands = {'install': install,'install_lib': install_lib, 'install_scripts': install_scripts, 'build_py': build_py,'clean':clean}
+_commands = {'install': install,'install_lib': install_lib, 'install_scripts': install_scripts, 'build_py': build_py, 'build_ext': build_ext, 'clean':clean}
 
 
 setup(cmdclass=_commands,
