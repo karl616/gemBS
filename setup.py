@@ -152,6 +152,9 @@ class install(_install):
             install_dir = os.path.join(gemBS_install_dir,"gemBS")
             _install_bundle(install_dir)
         except FileNotFoundError:
+            gemBSbin_dir = os.path.join(install_dir, "bin")
+            if not os.path.exists(gemBSbin_dir):
+                os.mkdir(gemBSbin_dir)
             print("""
 External libraries not found. Either these has to be built with:
 
