@@ -46,6 +46,11 @@ release: setup	gem3 $(SAMTOOLS_DIR) $(SAMTOOLS_DIR)/config.mk $(BCFTOOLS_DIR) $(
 	$(MAKE) --directory=gen
 	$(MAKE) --directory=bs_call
 
+conda: gen/Makefile
+	@mkdir -p $(FOLDER_BIN)
+	$(MAKE) --directory=utils
+	$(MAKE) --directory=gen
+
 debug: setup gem3-debug $(SAMTOOLS_DIR) $(SAMTOOLS_DIR)/config.mk $(BCFTOOLS_DIR) $(BCFTOOLS_DIR)/config.h
 	$(MAKE) --directory=utils debug
 	$(MAKE) --directory=gen debug
