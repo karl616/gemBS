@@ -155,6 +155,7 @@ class install(_install):
             gemBSbin_dir = os.path.join(install_dir, "bin")
             if not os.path.exists(gemBSbin_dir):
                 os.mkdir(gemBSbin_dir)
+            open(os.path.join(gemBSbin_dir,"empty"), 'a').close()
             print("""
 External libraries not found. Either these has to be built with:
 
